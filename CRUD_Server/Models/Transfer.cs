@@ -13,12 +13,19 @@ namespace CRUD_Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
-        public BankAccount BankAccount { get; set; }
+        [ForeignKey("BankAccount")]
+        public long BankAccount { get; set; }
 
-        public BankAccount DestBankAccount { get; set; }
+        [Required]
+        public long DestBankAccount { get; set; }
+
+        [Required]
         public float Amount { get; set; }
+
+        [Required]
         public string Description { get; set; }
+
+        [Required]
         public DateTime TransactionDate { get; set; }
     }
 }

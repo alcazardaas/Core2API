@@ -13,15 +13,28 @@ namespace CRUD_Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
-        public Client Client { get; set; }
+        [ForeignKey("Client")]
+        public string ClientId { get; set; }
 
+        [Required]
         public string AccountNumber { get; set; }
+
+        [Required]
         public string AccountClientNumber { get; set; }
+
+        [Required]
         public float Balance { get; set; }
+
+        [Required]
         public string Currency { get; set; }
+
+        [Required]
         public DateTime CreatedDate { get; set; }
+
+        [Required]
         public string AccountType { get; set; }
+
+        [Required]
         public bool AccountStatus { get; set; }
     }
 }

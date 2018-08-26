@@ -29,10 +29,9 @@ namespace CRUD_Server.Controllers
         {
             var item = _context.Clients.Find(id);
             if (item == null)
-            {
                 return NotFound();
-            }
-            return item;
+
+            return Ok(item);
         }
 
         [HttpPost]

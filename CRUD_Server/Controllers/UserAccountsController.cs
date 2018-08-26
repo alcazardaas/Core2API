@@ -22,29 +22,50 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(UserAccount item)
         {
+            var client = _context.Clients.Where(b => b.ClientId == item.ClientId).FirstOrDefault();
+
+            if (client == null)
+                return NotFound("Client do not exist");
+
             item.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
             _context.UserAccounts.Add(item);
             _context.SaveChanges();
 
-            return Ok(item);
+            return Ok();
         }
-
-        [HttpGet]
-        public bool Login(int clientId, string password)
+        
+        [HttpGet("{clientId}/{password}")]
+        public IActionResult Login(string clientId, string password)
         {
-            var account = checkAccount(clientId, password);
+            var account = CheckAccount(clientId, password);
             if(account == null)
             {
-                return false;
+                return NotFound("Account do not exist.");
             }
             else
             {
-                return true;
+                return Ok();
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Update(long id, UserAccount item)
+        {
+            var account = _context.UserAccounts.Find(id);
+            if (account == null)
+            {
+                return NotFound("Account do not exist. You can only modify the password");
+            }
 
-        private UserAccount checkAccount(int clientId, string password)
+            account.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
+
+            _context.UserAccounts.Update(account);
+            _context.SaveChanges();
+            return Ok(account);
+        }
+
+
+        private UserAccount CheckAccount(string clientId, string password)
         {
             var account = _context.UserAccounts.SingleOrDefault(a => a.ClientId.Equals(clientId));
             if(account != null)

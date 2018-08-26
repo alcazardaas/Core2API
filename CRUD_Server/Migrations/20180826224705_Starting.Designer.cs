@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUD_Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180825214044_Added BankAccount Payment Transfer")]
-    partial class AddedBankAccountPaymentTransfer
+    [Migration("20180826224705_Starting")]
+    partial class Starting
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,25 +27,27 @@ namespace CRUD_Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AccountClientNumber");
+                    b.Property<string>("AccountClientNumber")
+                        .IsRequired();
 
-                    b.Property<string>("AccountNumber");
+                    b.Property<string>("AccountNumber")
+                        .IsRequired();
 
                     b.Property<bool>("AccountStatus");
 
-                    b.Property<string>("AccountType");
+                    b.Property<string>("AccountType")
+                        .IsRequired();
 
                     b.Property<float>("Balance");
 
-                    b.Property<long>("ClientId");
+                    b.Property<string>("ClientId");
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("Currency");
+                    b.Property<string>("Currency")
+                        .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -60,27 +62,33 @@ namespace CRUD_Server.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<int>("ClientId");
+                    b.Property<string>("ClientId")
+                        .IsRequired();
 
                     b.Property<DateTime>("DateOfBirth");
 
                     b.Property<DateTime>("DateOfRegistration");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired();
 
                     b.Property<string>("State");
 
-                    b.Property<string>("Zip");
+                    b.Property<string>("Zip")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -95,9 +103,10 @@ namespace CRUD_Server.Migrations
 
                     b.Property<float>("Amount");
 
-                    b.Property<long>("BankAccountId");
+                    b.Property<long>("BankAccount");
 
-                    b.Property<string>("Currency");
+                    b.Property<string>("Currency")
+                        .IsRequired();
 
                     b.Property<DateTime>("DueDate");
 
@@ -105,13 +114,12 @@ namespace CRUD_Server.Migrations
 
                     b.Property<bool>("PaymentStatus");
 
-                    b.Property<string>("PaymentType");
+                    b.Property<string>("PaymentType")
+                        .IsRequired();
 
                     b.Property<DateTime>("TransactionDate");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BankAccountId");
 
                     b.ToTable("Payments");
                 });
@@ -124,49 +132,34 @@ namespace CRUD_Server.Migrations
 
                     b.Property<float>("Amount");
 
-                    b.Property<long>("BankAccountId");
+                    b.Property<long>("BankAccount");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
-                    b.Property<long?>("DestBankAccountId");
+                    b.Property<long>("DestBankAccount");
 
                     b.Property<DateTime>("TransactionDate");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankAccountId");
-
-                    b.HasIndex("DestBankAccountId");
-
                     b.ToTable("Transfers");
                 });
 
-            modelBuilder.Entity("CRUD_Server.Models.BankAccount", b =>
+            modelBuilder.Entity("CRUD_Server.Models.UserAccount", b =>
                 {
-                    b.HasOne("CRUD_Server.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CRUD_Server.Models.Payment", b =>
-                {
-                    b.HasOne("CRUD_Server.Models.BankAccount", "BankAccount")
-                        .WithMany()
-                        .HasForeignKey("BankAccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                    b.Property<string>("ClientId");
 
-            modelBuilder.Entity("CRUD_Server.Models.Transfer", b =>
-                {
-                    b.HasOne("CRUD_Server.Models.BankAccount", "BankAccount")
-                        .WithMany()
-                        .HasForeignKey("BankAccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<string>("Password")
+                        .IsRequired();
 
-                    b.HasOne("CRUD_Server.Models.BankAccount", "DestBankAccount")
-                        .WithMany()
-                        .HasForeignKey("DestBankAccountId");
+                    b.HasKey("Id");
+
+                    b.ToTable("UserAccounts");
                 });
 #pragma warning restore 612, 618
         }

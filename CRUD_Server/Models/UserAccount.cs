@@ -15,10 +15,10 @@ namespace CRUD_Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
-        public Client Client { get; set; }
+        [ForeignKey("Client")]
+        public string ClientId { get; set; }
 
-        public int ClientId { get; set; }
+        [Required]
         public string Password { get; set; }
     }
 }
