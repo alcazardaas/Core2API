@@ -27,6 +27,9 @@ namespace CRUD_Server.Controllers
             if (client == null)
                 return NotFound("Client do not exist");
 
+            if (FoundUserAccount(item.ClientId))
+                return BadRequest("User already exist");
+
             item.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
             _context.UserAccounts.Add(item);
             _context.SaveChanges();
@@ -76,6 +79,16 @@ namespace CRUD_Server.Controllers
                 }
             }
             return null;
+        }
+
+        private bool FoundUserAccount(string clientId)
+        {
+            var item = _context.UserAccounts.SingleOrDefault(c => c.ClientId.Equals(clientId));
+
+            if (item == null)
+                return false;
+
+            return true;
         }
     }
 }
