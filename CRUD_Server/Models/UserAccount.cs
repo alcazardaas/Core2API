@@ -20,5 +20,8 @@ namespace CRUD_Server.Models
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public string Role { get; set; }
     }
 }

@@ -108,8 +108,6 @@ namespace CRUD_Server.Migrations
 
                     b.Property<DateTime>("DueDate");
 
-                    b.Property<int>("MyProperty");
-
                     b.Property<bool>("PaymentStatus");
 
                     b.Property<string>("PaymentType")
@@ -153,6 +151,9 @@ namespace CRUD_Server.Migrations
                     b.Property<string>("ClientId");
 
                     b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.Property<string>("Role")
                         .IsRequired();
 
                     b.HasKey("Id");

@@ -31,8 +31,8 @@ namespace CRUD_Server.Models
         [Required]
         public DateTime TransactionDate { get; set; }
 
-        [Required]
-        public int MyProperty { get; set; }
+        //[Required]
+        //public int MyProperty { get; set; }
 
         [Required]
         public bool PaymentStatus { get; set; }

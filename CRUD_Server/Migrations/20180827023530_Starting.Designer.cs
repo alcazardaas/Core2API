@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUD_Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180826224705_Starting")]
+    [Migration("20180827023530_Starting")]
     partial class Starting
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,8 +110,6 @@ namespace CRUD_Server.Migrations
 
                     b.Property<DateTime>("DueDate");
 
-                    b.Property<int>("MyProperty");
-
                     b.Property<bool>("PaymentStatus");
 
                     b.Property<string>("PaymentType")
@@ -155,6 +153,9 @@ namespace CRUD_Server.Migrations
                     b.Property<string>("ClientId");
 
                     b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.Property<string>("Role")
                         .IsRequired();
 
                     b.HasKey("Id");

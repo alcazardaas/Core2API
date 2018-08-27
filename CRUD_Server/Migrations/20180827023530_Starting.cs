@@ -64,7 +64,6 @@ namespace CRUD_Server.Migrations
                     Currency = table.Column<string>(nullable: false),
                     DueDate = table.Column<DateTime>(nullable: false),
                     TransactionDate = table.Column<DateTime>(nullable: false),
-                    MyProperty = table.Column<int>(nullable: false),
                     PaymentStatus = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -96,7 +95,8 @@ namespace CRUD_Server.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: false)
+                    Password = table.Column<string>(nullable: false),
+                    Role = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
