@@ -30,7 +30,7 @@ namespace CRUD_Server.Controllers
         {
             var item = _context.Payments.Find(id);
             if (item == null)
-                return NotFound();
+                return BadRequest();
 
             return Ok(item);
         }
@@ -38,21 +38,24 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(Payment item)
         {
-            if (!FoundBankAccount(item.BankAccount))
-                return NotFound("This bank account does not exist");
+            if (!FoundBankAccount(item.Id))
+                return BadRequest("This bank account does not exist");
 
+            item.IsPaid = false;
             return CreatedAtRoute("Getpayment", new { id = item.Id }, item);
-
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(long id, Payment item)
         {
             var payment = _context.Payments.Find(id);
-            if (payment == null)
-                return NotFound();
+            //var account = _context.BankAccounts.Where(a => a.Id.Equals(item.BankAccountId));
 
-            payment.PaymentStatus = item.PaymentStatus;
+            //if (payment == null || account == null)
+            //    return BadRequest();
+
+
+            payment.IsPaid = item.IsPaid;
 
             _context.Payments.Update(payment);
             _context.SaveChanges();

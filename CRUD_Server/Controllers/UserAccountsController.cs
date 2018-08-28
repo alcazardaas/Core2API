@@ -29,12 +29,12 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(UserAccount item)
         {
-            var client = _context.Clients.Where(b => b.ClientId == item.ClientId).FirstOrDefault();
+            var client = _context.Clients.Where(b => b.SocialNumber == item.SocialNumber).FirstOrDefault();
 
             if (client == null)
-                return BadRequest("Client do not exist");
+                return BadRequest("Client  do not exist");
 
-            if (FoundUserAccount(item.ClientId))
+            if (FoundUserAccount(item.SocialNumber))
                 return BadRequest("User already exist");
 
             item.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
@@ -45,9 +45,9 @@ namespace CRUD_Server.Controllers
         }
         
         [HttpGet("{clientId}/{password}")]
-        public IActionResult Login(string clientId, string password)
+        public IActionResult Login(string socialNumber, string password)
         {
-            var account = CheckAccount(clientId, password);
+            var account = CheckAccount(socialNumber, password);
             if(account == null)
             {
                 return BadRequest("Account or password invalid.");
@@ -63,9 +63,7 @@ namespace CRUD_Server.Controllers
         {
             var account = _context.UserAccounts.Find(id);
             if (account == null)
-            {
-                return NotFound("Account do not exist. You can only modify the password");
-            }
+                return BadRequest("Account do not exist.");
 
             account.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
             account.Role = item.Role;
@@ -76,9 +74,9 @@ namespace CRUD_Server.Controllers
         }
 
 
-        private UserAccount CheckAccount(string clientId, string password)
+        private UserAccount CheckAccount(string socialNumber, string password)
         {
-            var account = _context.UserAccounts.SingleOrDefault(a => a.ClientId.Equals(clientId));
+            var account = _context.UserAccounts.SingleOrDefault(a => a.SocialNumber.Equals(socialNumber));
             if(account != null)
             {
                 if(BCrypt.Net.BCrypt.Verify(password, account.Password))
@@ -89,9 +87,9 @@ namespace CRUD_Server.Controllers
             return null;
         }
 
-        private bool FoundUserAccount(string clientId)
+        private bool FoundUserAccount(string SocialNumber)
         {
-            var item = _context.UserAccounts.SingleOrDefault(c => c.ClientId.Equals(clientId));
+            var item = _context.UserAccounts.SingleOrDefault(c => c.SocialNumber.Equals(SocialNumber));
 
             if (item == null)
                 return false;
@@ -103,7 +101,7 @@ namespace CRUD_Server.Controllers
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userAccount.ClientId),
+                //new Claim(JwtRegisteredClaimNames.UniqueName, userAccount.ClientId),
                 new Claim("userRole", userAccount.Role),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

@@ -55,7 +55,7 @@ namespace CRUD_Server.Controllers
                 return NotFound();
             }
 
-            client.ClientId = item.ClientId;
+            client.SocialNumber = item.SocialNumber;
             client.FirstName = item.FirstName;
             client.LastName = item.LastName;
             client.Gender = item.Gender;

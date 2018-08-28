@@ -18,14 +18,12 @@ namespace CRUD_Server.Controllers
             _context = context;
         }
 
-        // GET api/values
         [HttpGet]
         public ActionResult<List<BankAccount>> GetAll()
         {
             return _context.BankAccounts.ToList();
         }
 
-        // GET api/values/5
         [HttpGet("{id}", Name ="Getbankaccount")]
         public ActionResult<BankAccount> GetById(long id)
         {
@@ -36,7 +34,6 @@ namespace CRUD_Server.Controllers
             return Ok(item);
         }
 
-        // POST api/values
         [HttpPost]
         public IActionResult Create(BankAccount item)
         {
@@ -62,7 +59,7 @@ namespace CRUD_Server.Controllers
             }
 
             if(!FoundClient(item.ClientId))
-                return NotFound(item.ClientId);
+                return BadRequest(item.ClientId + " does not exist");
 
             _context.BankAccounts.Add(item);
             _context.SaveChanges();
@@ -70,7 +67,6 @@ namespace CRUD_Server.Controllers
             return CreatedAtRoute("Getbankaccount", new { id = item.Id }, item);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Update(long id, BankAccount item)
         {
@@ -86,7 +82,6 @@ namespace CRUD_Server.Controllers
             return Ok(bankAccount);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
@@ -98,9 +93,9 @@ namespace CRUD_Server.Controllers
             return Ok();
         }
 
-        private bool FoundClient(string clientId)
+        private bool FoundClient(long Id)
         {
-            var item = _context.Clients.Where(b => b.ClientId == clientId).FirstOrDefault();
+            var item = _context.Clients.Find(Id);
 
             if (item == null)
                 return false;

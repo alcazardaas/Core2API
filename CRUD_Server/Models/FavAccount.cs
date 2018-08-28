@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_Server.Models
 {
-    public class Transfer
+    public class FavAccount
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,16 +16,6 @@ namespace CRUD_Server.Models
         public long ClientId { get; set; }
         public Client Client { get; set; }
 
-        [Required]
-        public long DestBankAccount { get; set; }
-
-        [Required]
-        public float Amount { get; set; }
-        
-        [MaxLength(100)]
-        public string Description { get; set; }
-
-        [Required]
-        public DateTime TransactionDate { get; set; }
+        public string FavBankAccount { get; set; }
     }
 }
