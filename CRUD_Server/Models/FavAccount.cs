@@ -9,10 +9,6 @@ namespace CRUD_Server.Models
 {
     public class FavAccount
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
-
         public long ClientId { get; set; }
         public Client Client { get; set; }
 
