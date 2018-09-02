@@ -38,6 +38,7 @@ namespace CRUD_Server.Controllers
                 return BadRequest("User already exist");
 
             item.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
+
             _context.UserAccounts.Add(item);
             _context.SaveChanges();
 
@@ -66,7 +67,7 @@ namespace CRUD_Server.Controllers
                 return BadRequest("Account do not exist.");
 
             account.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
-            account.isAdmin = item.isAdmin;
+            account.IsAdmin = item.IsAdmin;
 
             _context.UserAccounts.Update(account);
             _context.SaveChanges();
@@ -101,8 +102,8 @@ namespace CRUD_Server.Controllers
         {
             var claims = new[]
             {
-                //new Claim(JwtRegisteredClaimNames.UniqueName, userAccount.ClientId),
-                //new Claim("userRole", userAccount.isAdmin),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userAccount.ClientId.ToString()),
+                new Claim("userRole", userAccount.IsAdmin.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
