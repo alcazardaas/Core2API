@@ -40,7 +40,10 @@ namespace CRUD_Server.Controllers
             bool accNum = false;
             bool cliNum = false;
 
-            while(!accNum || !cliNum)
+            if (!FoundClient(item.ClientId))
+                return BadRequest(item.ClientId + " does not exist");
+
+            while (!accNum || !cliNum)
             {
                 if (!accNum)
                 {
@@ -58,9 +61,6 @@ namespace CRUD_Server.Controllers
                 }
             }
 
-            if(!FoundClient(item.ClientId))
-                return BadRequest(item.ClientId + " does not exist");
-
             _context.BankAccounts.Add(item);
             _context.SaveChanges();
 
@@ -72,7 +72,7 @@ namespace CRUD_Server.Controllers
         {
             var bankAccount = _context.BankAccounts.Find(id);
             if (bankAccount == null)
-                return NotFound();
+                return BadRequest();
 
             bankAccount.Balance = item.Balance;
             bankAccount.AccountStatus = item.AccountStatus;
@@ -87,7 +87,7 @@ namespace CRUD_Server.Controllers
         {
             var item = _context.BankAccounts.Find(id);
             if (item == null)
-                return NotFound();
+                return BadRequest();
             _context.BankAccounts.Remove(item);
             _context.SaveChanges();
             return Ok();
