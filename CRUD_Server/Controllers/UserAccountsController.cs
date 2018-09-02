@@ -42,20 +42,20 @@ namespace CRUD_Server.Controllers
             _context.UserAccounts.Add(item);
             _context.SaveChanges();
 
-            return BuildToken(item);
+            return Ok();
         }
-        
-        [HttpGet("{clientId}/{password}")]
-        public IActionResult Login(string socialNumber, string password)
+
+        [HttpPost, Route("login")]
+        public IActionResult Login(UserAccount item)
         {
-            var account = CheckAccount(socialNumber, password);
-            if(account == null)
+            var account = CheckAccount(item.SocialNumber, item.Password);
+            if (account == null)
             {
                 return BadRequest("Account or password invalid.");
             }
             else
             {
-                return Ok();
+                return BuildToken(item);
             }
         }
 
@@ -78,9 +78,9 @@ namespace CRUD_Server.Controllers
         private UserAccount CheckAccount(string socialNumber, string password)
         {
             var account = _context.UserAccounts.SingleOrDefault(a => a.SocialNumber.Equals(socialNumber));
-            if(account != null)
+            if (account != null)
             {
-                if(BCrypt.Net.BCrypt.Verify(password, account.Password))
+                if (BCrypt.Net.BCrypt.Verify(password, account.Password))
                 {
                     return account;
                 }
@@ -110,13 +110,13 @@ namespace CRUD_Server.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["The_Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddDays(10);
+            var expiration = DateTime.UtcNow.AddMinutes(50);
 
             //create JWT after create claims key and credentials
 
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: "yourdomain.com",
-                audience: "yourdomain.com",
+                issuer: "http://localhost:44353",
+                audience: "http://localhost:44353",
                 claims: claims,
                 expires: expiration,
                 signingCredentials: creds);
