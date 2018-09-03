@@ -23,11 +23,10 @@ namespace CRUD_Server.Models
         public string SocialNumber { get; set; }
 
         [Required]
-        [MinLength(8),MaxLength(30)]
+        [MinLength(8)]
         public string Password { get; set; }
 
         [Required]
-        [MaxLength(20)]
-        public string Role { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

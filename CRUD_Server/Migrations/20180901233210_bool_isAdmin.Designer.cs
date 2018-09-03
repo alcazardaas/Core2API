@@ -4,14 +4,16 @@ using CRUD_Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CRUD_Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20180901233210_bool_isAdmin")]
+    partial class bool_isAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,14 +201,15 @@ namespace CRUD_Server.Migrations
 
                     b.Property<long>("ClientId");
 
-                    b.Property<bool>("IsAdmin");
-
                     b.Property<string>("Password")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<string>("SocialNumber")
                         .IsRequired()
                         .HasMaxLength(20);
+
+                    b.Property<bool>("isAdmin");
 
                     b.HasKey("Id");
 

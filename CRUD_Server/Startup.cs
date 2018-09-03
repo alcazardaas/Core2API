@@ -34,16 +34,24 @@ namespace CRUD_Server
             services.AddDbContext<ApplicationContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:FinalProjectBSDB"]));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSession();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("EnableCORS", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
+                });
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "yourdomain.com",
-                    ValidAudience = "yourdomain.com",
+                    ValidIssuer = "http://localhost:44353",
+                    ValidAudience = "http://localhost:44353",
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(Configuration["The_Key"])),
                     ClockSkew = TimeSpan.Zero
@@ -64,6 +72,7 @@ namespace CRUD_Server
 
             app.UseSession();
             app.UseAuthentication();
+            app.UseCors("EnableCORS");
 
             app.UseHttpsRedirection();
             app.UseMvc();
