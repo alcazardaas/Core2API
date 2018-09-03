@@ -18,14 +18,12 @@ namespace CRUD_Server.Controllers
             _context = context;
         }
 
-        // GET api/values
         [HttpGet]
         public ActionResult<List<BankAccount>> GetAll()
         {
             return _context.BankAccounts.ToList();
         }
 
-        // GET api/values/5
         [HttpGet("{id}", Name ="Getbankaccount")]
         public ActionResult<BankAccount> GetById(long id)
         {
@@ -36,14 +34,16 @@ namespace CRUD_Server.Controllers
             return Ok(item);
         }
 
-        // POST api/values
         [HttpPost]
         public IActionResult Create(BankAccount item)
         {
             bool accNum = false;
             bool cliNum = false;
 
-            while(!accNum || !cliNum)
+            if (!FoundClient(item.ClientId))
+                return BadRequest(item.ClientId + " does not exist");
+
+            while (!accNum || !cliNum)
             {
                 if (!accNum)
                 {
@@ -61,22 +61,18 @@ namespace CRUD_Server.Controllers
                 }
             }
 
-            if(!FoundClient(item.ClientId))
-                return NotFound(item.ClientId);
-
             _context.BankAccounts.Add(item);
             _context.SaveChanges();
 
             return CreatedAtRoute("Getbankaccount", new { id = item.Id }, item);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public IActionResult Update(long id, BankAccount item)
         {
             var bankAccount = _context.BankAccounts.Find(id);
             if (bankAccount == null)
-                return NotFound();
+                return BadRequest();
 
             bankAccount.Balance = item.Balance;
             bankAccount.AccountStatus = item.AccountStatus;
@@ -86,21 +82,20 @@ namespace CRUD_Server.Controllers
             return Ok(bankAccount);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
             var item = _context.BankAccounts.Find(id);
             if (item == null)
-                return NotFound();
+                return BadRequest();
             _context.BankAccounts.Remove(item);
             _context.SaveChanges();
             return Ok();
         }
 
-        private bool FoundClient(string clientId)
+        private bool FoundClient(long Id)
         {
-            var item = _context.Clients.Where(b => b.ClientId == clientId).FirstOrDefault();
+            var item = _context.Clients.Find(Id);
 
             if (item == null)
                 return false;

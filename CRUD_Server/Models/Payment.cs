@@ -13,28 +13,27 @@ namespace CRUD_Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [ForeignKey("BankAccount")]
-        public long BankAccount { get; set; }
+        public long ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public long ProviderId { get; set; }
+        public Provider Provider { get; set; }
 
         [Required]
+        [MaxLength(20)]
         public string PaymentType { get; set; }
 
         [Required]
         public float Amount { get; set; }
 
         [Required]
+        [MaxLength(15)]
         public string Currency { get; set; }
 
         [Required]
         public DateTime DueDate { get; set; }
 
         [Required]
-        public DateTime TransactionDate { get; set; }
-
-        //[Required]
-        //public int MyProperty { get; set; }
-
-        [Required]
-        public bool PaymentStatus { get; set; }
+        public bool IsPaid { get; set; }
     }
 }

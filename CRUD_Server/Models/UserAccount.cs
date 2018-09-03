@@ -15,13 +15,18 @@ namespace CRUD_Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [ForeignKey("Client")]
-        public string ClientId { get; set; }
+        public long ClientId { get; set; }
+        public Client Client { get; set; }
 
         [Required]
+        [MaxLength(20)]
+        public string SocialNumber { get; set; }
+
+        [Required]
+        [MinLength(8)]
         public string Password { get; set; }
 
         [Required]
-        public string Role { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

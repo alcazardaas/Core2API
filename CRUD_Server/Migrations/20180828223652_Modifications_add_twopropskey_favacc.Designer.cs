@@ -4,14 +4,16 @@ using CRUD_Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CRUD_Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20180828223652_Modifications_add_twopropskey_favacc")]
+    partial class Modifications_add_twopropskey_favacc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,7 +112,13 @@ namespace CRUD_Server.Migrations
 
                     b.Property<string>("FavBankAccount");
 
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.HasKey("ClientId", "FavBankAccount");
+
+                    b.HasAlternateKey("Id");
 
                     b.ToTable("FavAccounts");
                 });
@@ -199,10 +207,13 @@ namespace CRUD_Server.Migrations
 
                     b.Property<long>("ClientId");
 
-                    b.Property<bool>("IsAdmin");
-
                     b.Property<string>("Password")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
                     b.Property<string>("SocialNumber")
                         .IsRequired()

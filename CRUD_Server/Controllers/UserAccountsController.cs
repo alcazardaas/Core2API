@@ -29,32 +29,33 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(UserAccount item)
         {
-            var client = _context.Clients.Where(b => b.ClientId == item.ClientId).FirstOrDefault();
+            var client = _context.Clients.Where(b => b.SocialNumber == item.SocialNumber).FirstOrDefault();
 
             if (client == null)
-                return BadRequest("Client do not exist");
+                return BadRequest("Client  do not exist");
 
-            if (FoundUserAccount(item.ClientId))
+            if (FoundUserAccount(item.SocialNumber))
                 return BadRequest("User already exist");
 
             item.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
+
             _context.UserAccounts.Add(item);
             _context.SaveChanges();
 
-            return BuildToken(item);
+            return Ok();
         }
-        
-        [HttpGet("{clientId}/{password}")]
-        public IActionResult Login(string clientId, string password)
+
+        [HttpPost, Route("login")]
+        public IActionResult Login(UserAccount item)
         {
-            var account = CheckAccount(clientId, password);
-            if(account == null)
+            var account = CheckAccount(item.SocialNumber, item.Password);
+            if (account == null)
             {
                 return BadRequest("Account or password invalid.");
             }
             else
             {
-                return Ok();
+                return BuildToken(item);
             }
         }
 
@@ -63,12 +64,10 @@ namespace CRUD_Server.Controllers
         {
             var account = _context.UserAccounts.Find(id);
             if (account == null)
-            {
-                return NotFound("Account do not exist. You can only modify the password");
-            }
+                return BadRequest("Account do not exist.");
 
             account.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
-            account.Role = item.Role;
+            account.IsAdmin = item.IsAdmin;
 
             _context.UserAccounts.Update(account);
             _context.SaveChanges();
@@ -76,12 +75,12 @@ namespace CRUD_Server.Controllers
         }
 
 
-        private UserAccount CheckAccount(string clientId, string password)
+        private UserAccount CheckAccount(string socialNumber, string password)
         {
-            var account = _context.UserAccounts.SingleOrDefault(a => a.ClientId.Equals(clientId));
-            if(account != null)
+            var account = _context.UserAccounts.SingleOrDefault(a => a.SocialNumber.Equals(socialNumber));
+            if (account != null)
             {
-                if(BCrypt.Net.BCrypt.Verify(password, account.Password))
+                if (BCrypt.Net.BCrypt.Verify(password, account.Password))
                 {
                     return account;
                 }
@@ -89,9 +88,9 @@ namespace CRUD_Server.Controllers
             return null;
         }
 
-        private bool FoundUserAccount(string clientId)
+        private bool FoundUserAccount(string SocialNumber)
         {
-            var item = _context.UserAccounts.SingleOrDefault(c => c.ClientId.Equals(clientId));
+            var item = _context.UserAccounts.SingleOrDefault(c => c.SocialNumber.Equals(SocialNumber));
 
             if (item == null)
                 return false;
@@ -103,21 +102,21 @@ namespace CRUD_Server.Controllers
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userAccount.ClientId),
-                new Claim("userRole", userAccount.Role),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userAccount.ClientId.ToString()),
+                new Claim("userRole", userAccount.IsAdmin.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["The_Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddDays(10);
+            var expiration = DateTime.UtcNow.AddMinutes(50);
 
             //create JWT after create claims key and credentials
 
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: "yourdomain.com",
-                audience: "yourdomain.com",
+                issuer: "http://localhost:44353",
+                audience: "http://localhost:44353",
                 claims: claims,
                 expires: expiration,
                 signingCredentials: creds);

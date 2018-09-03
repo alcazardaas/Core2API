@@ -38,8 +38,8 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(Transfer item)
         {
-            if (!FoundBankAccount(item.BankAccount))
-                return NotFound();
+            //if (!FoundBankAccount(item.BankAccount))
+            //    return NotFound();
 
             _context.Transfers.Add(item);
             _context.SaveChanges();
