@@ -17,6 +17,9 @@ namespace CRUD_Server.Models
         public Client Client { get; set; }
 
         [Required]
+        public long DiscAccount { get; set; }
+
+        [Required]
         public long DestBankAccount { get; set; }
 
         [Required]
