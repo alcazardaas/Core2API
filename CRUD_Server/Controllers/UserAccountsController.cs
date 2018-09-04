@@ -37,6 +37,7 @@ namespace CRUD_Server.Controllers
             if (FoundUserAccount(item.SocialNumber))
                 return BadRequest("User already exist");
 
+            item.ClientId = client.Id;
             item.Password = BCrypt.Net.BCrypt.HashPassword(item.Password);
 
             _context.UserAccounts.Add(item);
@@ -115,8 +116,8 @@ namespace CRUD_Server.Controllers
             //create JWT after create claims key and credentials
 
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: "http://localhost:44353",
-                audience: "http://localhost:44353",
+                issuer: "yourdomain.com",
+                audience: "yourdomain.com",
                 claims: claims,
                 expires: expiration,
                 signingCredentials: creds);

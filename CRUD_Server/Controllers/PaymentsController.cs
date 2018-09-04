@@ -35,6 +35,18 @@ namespace CRUD_Server.Controllers
             return Ok(item);
         }
 
+        [HttpPost, Route("getuserpayments")]
+        public ActionResult<List<Payment>> GetUserPayments(UserAccount item)
+        {
+            var user = _context.UserAccounts.SingleOrDefault(u => u.SocialNumber == item.SocialNumber);
+
+            if (user == null)
+                return BadRequest();
+
+            item.ClientId = user.ClientId;
+            return _context.Payments.Where(b => b.ClientId == item.ClientId).ToList();
+        }
+
         [HttpPost]
         public IActionResult Create(Payment item)
         {

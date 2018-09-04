@@ -24,7 +24,7 @@ namespace CRUD_Server.Controllers
             return _context.BankAccounts.ToList();
         }
 
-        [HttpGet("{id}", Name ="Getbankaccount")]
+        [HttpGet("{id}", Name = "Getbankaccount")]
         public ActionResult<BankAccount> GetById(long id)
         {
             var item = _context.BankAccounts.Find(id);
@@ -32,6 +32,18 @@ namespace CRUD_Server.Controllers
                 return NotFound();
 
             return Ok(item);
+        }
+
+        [HttpPost, Route("getuseraccounts")]
+        public ActionResult<List<BankAccount>> GetUserAccounts(UserAccount item)
+        {
+            var user = _context.UserAccounts.SingleOrDefault(u => u.SocialNumber == item.SocialNumber);
+
+            if (user == null)
+                return BadRequest();
+
+            item.ClientId = user.ClientId;
+            return _context.BankAccounts.Where(b => b.ClientId == item.ClientId).ToList();
         }
 
         [HttpPost]
@@ -47,7 +59,7 @@ namespace CRUD_Server.Controllers
             {
                 if (!accNum)
                 {
-                    if(!FoundAccountNumb(item.AccountNumber = CreateAccountNumb()))
+                    if (!FoundAccountNumb(item.AccountNumber = CreateAccountNumb()))
                     {
                         accNum = true;
                     }
@@ -64,7 +76,7 @@ namespace CRUD_Server.Controllers
             _context.BankAccounts.Add(item);
             _context.SaveChanges();
 
-            return CreatedAtRoute("Getbankaccount", new { id = item.Id }, item);
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -123,11 +135,11 @@ namespace CRUD_Server.Controllers
             return true;
         }
 
-        private string CreateAccountNumb ()
+        private string CreateAccountNumb()
         {
             Random random = new Random();
             string account = "";
-            for(int i = 0; i < 12; i++)
+            for (int i = 0; i < 12; i++)
             {
                 account += random.Next(0, 10).ToString();
             }

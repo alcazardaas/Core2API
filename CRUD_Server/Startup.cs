@@ -50,8 +50,8 @@ namespace CRUD_Server
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "http://localhost:44353",
-                    ValidAudience = "http://localhost:44353",
+                    ValidIssuer = "yourdomain.com",
+                    ValidAudience = "yourdomain.com",
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(Configuration["The_Key"])),
                     ClockSkew = TimeSpan.Zero
