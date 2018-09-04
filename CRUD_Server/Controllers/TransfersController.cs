@@ -25,7 +25,7 @@ namespace CRUD_Server.Controllers
             return _context.Transfers.ToList();
         }
 
-        [HttpGet("{id}", Name ="Gettransfer")]
+        [HttpGet("{id}", Name = "Gettransfer")]
         public ActionResult<Transfer> GetById(long id)
         {
             var item = _context.Transfers.Find(id);
@@ -50,9 +50,17 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(Transfer item)
         {
-            //if (!FoundBankAccount(item.BankAccount))
-            //    return NotFound();
+            var discAccount = _context.BankAccounts.Find(item.DiscAccount);
+            var destAccount = _context.BankAccounts.Find(item.DestBankAccount);
 
+            if (discAccount == null || destAccount == null)
+                return BadRequest();
+
+            discAccount.Balance -= item.Amount;
+            destAccount.Balance += item.Amount;
+
+            _context.BankAccounts.Update(discAccount);
+            _context.BankAccounts.Update(destAccount);
             _context.Transfers.Add(item);
             _context.SaveChanges();
             return CreatedAtRoute("Gettransfer", new { id = item.Id }, item);
@@ -82,15 +90,6 @@ namespace CRUD_Server.Controllers
             _context.Transfers.Remove(transfer);
             _context.SaveChanges();
             return Ok();
-        }
-
-        private bool FoundBankAccount(long bankAccount)
-        {
-            var item = _context.BankAccounts.Find(bankAccount);
-            if (item == null)
-                return false;
-
-            return true;
         }
     }
 }
