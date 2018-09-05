@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180905153727_UserAccounts_IsAdmin_notRqeuired.cs" />
+    <Compile Remove="Migrations\20180905153727_UserAccounts_IsAdmin_notRqeuired.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

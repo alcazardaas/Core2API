@@ -26,7 +26,6 @@ namespace CRUD_Server.Models
         [MinLength(8)]
         public string Password { get; set; }
 
-        [Required]
         public bool IsAdmin { get; set; }
     }
 }

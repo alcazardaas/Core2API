@@ -56,6 +56,7 @@ namespace CRUD_Server.Controllers
             }
             else
             {
+                item.IsAdmin = account.IsAdmin;
                 return BuildToken(item);
             }
         }
@@ -112,6 +113,7 @@ namespace CRUD_Server.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expiration = DateTime.UtcNow.AddMinutes(50);
+            var isAdmin = userAccount.IsAdmin;
 
             //create JWT after create claims key and credentials
 
@@ -125,7 +127,8 @@ namespace CRUD_Server.Controllers
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = expiration
+                expiration = expiration,
+                isAdmin = isAdmin
             });
         }
     }
