@@ -53,7 +53,7 @@ namespace CRUD_Server.Controllers
             var discAccount = _context.BankAccounts.Find(item.DiscAccount);
             var destAccount = _context.BankAccounts.Find(item.DestBankAccount);
 
-            if (discAccount == null || destAccount == null)
+            if (discAccount == null || destAccount == null || discAccount.Balance < item.Amount)
                 return BadRequest();
 
             discAccount.Balance -= item.Amount;

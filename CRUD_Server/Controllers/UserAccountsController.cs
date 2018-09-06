@@ -26,6 +26,12 @@ namespace CRUD_Server.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet]
+        public ActionResult<List<UserAccount>> GetAll()
+        {
+            return _context.UserAccounts.ToList();
+        }
+
         [HttpPost]
         public IActionResult Create(UserAccount item)
         {
