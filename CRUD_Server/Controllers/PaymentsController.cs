@@ -76,11 +76,32 @@ namespace CRUD_Server.Controllers
         [HttpPost]
         public IActionResult Create(Payment item)
         {
-            if (!FoundBankAccount(item.Id))
-                return BadRequest("This bank account does not exist");
+            var client = _context.Clients.Find(item.ClientId);
+            if (client == null)
+                return BadRequest("User doesn't exist");
 
-            item.IsPaid = false;
-            return CreatedAtRoute("Getpayment", new { id = item.Id }, item);
+            var provider = _context.Providers.Find(item.ProviderId);
+            if (provider == null)
+                return BadRequest("Provider doesn't exist");
+
+            var payment = _context.Payments.SingleOrDefault(p => p.ClientId == client.Id && p.ProviderId == provider.Id);
+            if (payment == null)
+            {
+                item.IsPaid = false;
+
+                _context.Payments.Add(item);
+                _context.SaveChanges();
+                return CreatedAtRoute("Getpayment", new { id = item.Id }, item);
+            }
+            else
+            {
+                payment.Amount += payment.Amount;
+                payment.IsPaid = false;
+                _context.Payments.Update(payment);
+                _context.SaveChanges();
+                return Ok();
+            }
+
         }
 
         [HttpPut("{id}")]

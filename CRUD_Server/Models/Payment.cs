@@ -18,8 +18,7 @@ namespace CRUD_Server.Models
 
         public long ProviderId { get; set; }
         public Provider Provider { get; set; }
-
-        [Required]
+        
         [MaxLength(20)]
         public string PaymentType { get; set; }
 

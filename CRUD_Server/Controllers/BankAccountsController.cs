@@ -52,6 +52,9 @@ namespace CRUD_Server.Controllers
             bool accNum = false;
             bool cliNum = false;
 
+            var client = _context.Clients.FirstOrDefault(c => c.SocialNumber == item.ClientSocialNumber);
+            item.ClientId = client.Id;
+
             if (!FoundClient(item.ClientId))
                 return BadRequest(item.ClientId + " does not exist");
 

@@ -40,5 +40,8 @@ namespace CRUD_Server.Models
 
         [Required]
         public bool AccountStatus { get; set; }
+
+        [NotMapped]
+        public string ClientSocialNumber { get; set; }
     }
 }
