@@ -51,13 +51,15 @@ namespace CRUD_Server.Controllers
         public IActionResult Create(Transfer item)
         {
             var discAccount = _context.BankAccounts.Find(item.DiscAccount);
-            var destAccount = _context.BankAccounts.Find(item.DestBankAccount);
+            var destAccount = _context.BankAccounts.SingleOrDefault( b => b.AccountClientNumber == item.DestBankAccountClientNumber);
 
             if (discAccount == null || destAccount == null || discAccount.Balance < item.Amount)
                 return BadRequest();
 
             discAccount.Balance -= item.Amount;
             destAccount.Balance += item.Amount;
+            item.DestBankAccount = destAccount.Id;
+            item.ClientId = discAccount.ClientId;
 
             _context.BankAccounts.Update(discAccount);
             _context.BankAccounts.Update(destAccount);

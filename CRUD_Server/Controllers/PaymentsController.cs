@@ -51,16 +51,23 @@ namespace CRUD_Server.Controllers
         public IActionResult PayPayment(PayPayment paypayment)
         {
             var bankaccount = _context.BankAccounts.Find(paypayment.BankAccountId);
-            var userpayment = _context.Payments.SingleOrDefault(p => p.ClientId == paypayment.ClientId && p.ProviderId == paypayment.ProviderId);
+            if (bankaccount == null)
+                BadRequest("Account does not exist");
 
-            if (bankaccount == null || userpayment == null || bankaccount.Balance > userpayment.Amount)
-                return BadRequest(paypayment.BankAccountId);
+            var client = _context.Clients.SingleOrDefault(c => c.SocialNumber == paypayment.ClientId);
+            if (client == null)
+                BadRequest("Client does not exist");
 
-            bankaccount.Balance -= userpayment.Amount;
-            userpayment.Amount = 0;
-            userpayment.IsPaid = true;
+            var paythispayment = _context.Payments.SingleOrDefault(p => p.ClientId == client.Id && p.ProviderId == paypayment.ProviderId);
+
+            if (paythispayment == null || bankaccount.Balance <= paythispayment.Amount)
+                return BadRequest(paythispayment);
+
+            bankaccount.Balance -= paythispayment.Amount;
+            paythispayment.Amount = 0;
+            paythispayment.IsPaid = true;
             _context.BankAccounts.Update(bankaccount);
-            _context.Payments.Update(userpayment);
+            _context.Payments.Update(paythispayment);
 
             _context.SaveChanges();
             return Ok();

@@ -19,7 +19,6 @@ namespace CRUD_Server.Models
         [Required]
         public long DiscAccount { get; set; }
 
-        [Required]
         public long DestBankAccount { get; set; }
 
         [Required]
@@ -30,5 +29,8 @@ namespace CRUD_Server.Models
 
         [Required]
         public DateTime TransactionDate { get; set; }
+
+        [NotMapped]
+        public string DestBankAccountClientNumber { get; set; }
     }
 }

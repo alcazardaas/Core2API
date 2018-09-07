@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20180905153727_UserAccounts_IsAdmin_notRqeuired.cs" />
     <Compile Remove="Migrations\20180905153727_UserAccounts_IsAdmin_notRqeuired.Designer.cs" />
+    <Compile Remove="Migrations\20180907034727_wip_trasnfers.cs" />
+    <Compile Remove="Migrations\20180907034727_wip_trasnfers.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

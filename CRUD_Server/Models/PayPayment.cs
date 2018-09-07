@@ -9,6 +9,6 @@ namespace CRUD_Server.Models
     {
         public long BankAccountId { get; set; }
         public long ProviderId { get; set; }
-        public long ClientId { get; set; }
+        public string ClientId { get; set; }
     }
 }
