@@ -25,7 +25,7 @@ namespace CRUD_Server.Controllers
             return _context.Payments.ToList();
         }
 
-        [HttpGet("{id}", Name ="Getpayment")]
+        [HttpGet("{id}", Name = "Getpayment")]
         public ActionResult<Payment> GetById(long id)
         {
             var item = _context.Payments.Find(id);
@@ -45,6 +45,25 @@ namespace CRUD_Server.Controllers
 
             item.ClientId = user.ClientId;
             return _context.Payments.Where(b => b.ClientId == item.ClientId).ToList();
+        }
+
+        [HttpPost, Route("paypayment")]
+        public IActionResult PayPayment(PayPayment paypayment)
+        {
+            var bankaccount = _context.BankAccounts.Find(paypayment.BankAccountId);
+            var userpayment = _context.Payments.SingleOrDefault(p => p.ClientId == paypayment.ClientId && p.ProviderId == paypayment.ProviderId);
+
+            if (bankaccount == null || userpayment == null || bankaccount.Balance > userpayment.Amount)
+                return BadRequest(paypayment.BankAccountId);
+
+            bankaccount.Balance -= userpayment.Amount;
+            userpayment.Amount = 0;
+            userpayment.IsPaid = true;
+            _context.BankAccounts.Update(bankaccount);
+            _context.Payments.Update(userpayment);
+
+            _context.SaveChanges();
+            return Ok();
         }
 
         [HttpPost]

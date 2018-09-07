@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CRUD_Server.Migrations
 {
-    public partial class Modifications_add_twopropskey_favacc : Migration
+    public partial class Fixed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,15 +76,12 @@ namespace CRUD_Server.Migrations
                 name: "FavAccounts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<long>(nullable: false),
                     FavBankAccount = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FavAccounts", x => new { x.ClientId, x.FavBankAccount });
-                    table.UniqueConstraint("AK_FavAccounts_Id", x => x.Id);
                     table.ForeignKey(
                         name: "FK_FavAccounts_Clients_ClientId",
                         column: x => x.ClientId,
@@ -100,6 +97,7 @@ namespace CRUD_Server.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<long>(nullable: false),
+                    DiscAccount = table.Column<long>(nullable: false),
                     DestBankAccount = table.Column<long>(nullable: false),
                     Amount = table.Column<float>(nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: true),
@@ -124,8 +122,8 @@ namespace CRUD_Server.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<long>(nullable: false),
                     SocialNumber = table.Column<string>(maxLength: 20, nullable: false),
-                    Password = table.Column<string>(maxLength: 30, nullable: false),
-                    Role = table.Column<string>(maxLength: 20, nullable: false)
+                    Password = table.Column<string>(nullable: false),
+                    IsAdmin = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

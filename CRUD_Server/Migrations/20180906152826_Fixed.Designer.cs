@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRUD_Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180902001436_Changes-to-UserAccount-password")]
-    partial class ChangestoUserAccountpassword
+    [Migration("20180906152826_Fixed")]
+    partial class Fixed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,6 +183,8 @@ namespace CRUD_Server.Migrations
                         .HasMaxLength(100);
 
                     b.Property<long>("DestBankAccount");
+
+                    b.Property<long>("DiscAccount");
 
                     b.Property<DateTime>("TransactionDate");
 

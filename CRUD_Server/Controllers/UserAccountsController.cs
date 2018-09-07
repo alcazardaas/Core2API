@@ -37,9 +37,6 @@ namespace CRUD_Server.Controllers
         {
             var client = _context.Clients.Where(b => b.SocialNumber == item.SocialNumber).FirstOrDefault();
 
-            if (client == null)
-                return BadRequest("Client  do not exist");
-
             if (FoundUserAccount(item.SocialNumber))
                 return BadRequest("User already exist");
 
