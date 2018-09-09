@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20180905153727_UserAccounts_IsAdmin_notRqeuired.Designer.cs" />
     <Compile Remove="Migrations\20180907034727_wip_trasnfers.cs" />
     <Compile Remove="Migrations\20180907034727_wip_trasnfers.Designer.cs" />
+    <Compile Remove="Migrations\20180908173146_something.cs" />
+    <Compile Remove="Migrations\20180908173146_something.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

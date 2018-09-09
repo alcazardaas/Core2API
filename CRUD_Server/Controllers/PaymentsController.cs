@@ -91,12 +91,13 @@ namespace CRUD_Server.Controllers
 
                 _context.Payments.Add(item);
                 _context.SaveChanges();
-                return CreatedAtRoute("Getpayment", new { id = item.Id }, item);
+                return Ok();
             }
             else
             {
-                payment.Amount += payment.Amount;
+                payment.Amount += item.Amount;
                 payment.IsPaid = false;
+                payment.DueDate = item.DueDate;
                 _context.Payments.Update(payment);
                 _context.SaveChanges();
                 return Ok();

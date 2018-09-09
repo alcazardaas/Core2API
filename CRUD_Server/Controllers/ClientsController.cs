@@ -37,6 +37,17 @@ namespace CRUD_Server.Controllers
             return Ok(item);
         }
 
+        [HttpPost, Route("getclientbysocialnumber")]
+        public IActionResult GetCLientBySocialNumber(PayPayment item)
+        {
+            var client = _context.Clients.SingleOrDefault(c => c.SocialNumber == item.ClientId);
+
+            if (client == null)
+                return BadRequest("CLient does not exist");
+            
+            return Ok(client);
+        }
+
         [HttpPost]
         public IActionResult Create(Client item)
         {
