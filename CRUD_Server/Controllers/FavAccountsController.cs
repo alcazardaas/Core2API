@@ -6,11 +6,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRUD_Server.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.HttpSys;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRUD_Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FavAccountsController : ControllerBase
     {
         private readonly ApplicationContext _context;

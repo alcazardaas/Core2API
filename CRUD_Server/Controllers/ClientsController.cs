@@ -11,7 +11,7 @@ namespace CRUD_Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClientsController : ControllerBase
     {
         private readonly ApplicationContext _context;
