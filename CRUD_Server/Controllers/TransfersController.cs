@@ -59,6 +59,18 @@ namespace CRUD_Server.Controllers
             if (discAccount == null || destAccount == null || discAccount.Balance < item.Amount)
                 return BadRequest();
 
+            if (discAccount.Currency == "Colones" && destAccount.Currency == "Dolars")
+            {
+                double v = item.Amount * 0.001702;
+                item.Amount = (float) v;
+            }
+
+            if (discAccount.Currency == "Dolars" && destAccount.Currency == "Colones")
+            {
+                double v = item.Amount * 587.699871;
+                item.Amount = (float)v;
+            }
+
             discAccount.Balance -= item.Amount;
             destAccount.Balance += item.Amount;
             item.DestBankAccount = destAccount.Id;
