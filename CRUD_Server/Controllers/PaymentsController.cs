@@ -63,8 +63,23 @@ namespace CRUD_Server.Controllers
 
             var paythispayment = _context.Payments.SingleOrDefault(p => p.ClientId == client.Id && p.ProviderId == paypayment.ProviderId);
 
-            if (paythispayment == null || bankaccount.Balance <= paythispayment.Amount)
+            if (paythispayment == null)
                 return BadRequest(paythispayment);
+
+            if (bankaccount.Currency == "Colones" && paythispayment.Currency == "Dolars")
+            {
+                double v = paythispayment.Amount * 587.699871;
+                paythispayment.Amount = (float)v;
+            }
+
+            if (bankaccount.Currency == "Dolars" && paythispayment.Currency == "Colones")
+            {
+                double v = paythispayment.Amount * 0.001702;
+                paythispayment.Amount = (float)v;
+            }
+
+            if (bankaccount.Balance <= paythispayment.Amount)
+                return BadRequest();
 
             bankaccount.Balance -= paythispayment.Amount;
             paythispayment.Amount = 0;
